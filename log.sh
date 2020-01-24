@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd log_files
+
 # Log CPU and memory usage for Nesh execution hosts.
 
 target_sec=$(date -d "+7 days" +%s) # Total output period
