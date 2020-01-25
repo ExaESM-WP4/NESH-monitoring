@@ -10,7 +10,7 @@ def capture_qstat_now():
     """Create dataframe from qstatall, minus sensitive info, plus timestamp."""
 
     # get timestamp before the (possibly slow) parsing happens
-    time_stamp = pd.TImestamp.now()
+    time_stamp = pd.Timestamp.now()
 
     # call qstat and capture stdout stream
     qstat_cmd = ['qstatall', ]
