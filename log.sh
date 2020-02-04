@@ -24,8 +24,7 @@ fi
 
 # Log CPU and memory usage for Nesh execution hosts.
 
-cd log_files
-
+mkdir -p log_files/
 mkdir -p qstat_logs/
 
 target_sec=$(date -d "+7 days" +%s) # Total output period
@@ -33,7 +32,7 @@ salt_value=$(uuidgen -r) # Random UUID as salt value
 
 while [ $[$target_sec-$(date +%s)] -gt 0 ]; do
  now=$(date +"%Y-%m-%d-%H-%M-%S")
- qstat -E -F fcpu,fmem1,ucpu,cpuavg1,umem1,ehost,quenm -o fcpu > ${now}.log
-../capture_qstatall_to_csv.py ${salt_value} qstat_logs/qstatall_${now}.csv.gz
+ qstat -E -F fcpu,fmem1,fswap1,ucpu,umem1,uswap1,cpuavg1,ldavg1,ehost,quenm -o fcpu > log_files/${now}.log
+ capture_qstatall_to_csv.py ${salt_value} qstat_logs/qstatall_${now}.csv.gz
  sleep 10m # Output interval
 done
