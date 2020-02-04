@@ -24,7 +24,7 @@ def capture_qstat_now(salt_value):
     df = df.drop(df.index[0])
 
     # set time stamp
-    df['time'] = time_stamp
+    df['Time'] = time_stamp
 
     return df
 
