@@ -35,7 +35,7 @@ def capture_qstat_now(salt_value):
 def write_df_to_disk(salt_value,file_name):
     """Dump qstatall dataframe to `file_name`."""
     df = capture_qstat_now(salt_value)
-    df.to_csv(file_name)
+    df.to_csv(file_name,index=False)
 
 
 if __name__ == '__main__':
