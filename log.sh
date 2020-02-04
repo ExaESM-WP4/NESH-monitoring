@@ -1,12 +1,15 @@
 #!/bin/bash
 
-# Initialize virtual Python environment.
-
+# Steps to create a clean env
+#
 # module load python3.7.4
+# rm -rf py3venv/
 # python3 -m venv py3venv/
 # source py3venv/bin/activate
 # pip install click pandas
 # pip freeze > requirements.txt
+
+# Initialize virtual Python environment.
 
 module load python3.7.4 # Python base version
 which python3 &> /dev/null || { echo "python3 not found"; exit 1; }
