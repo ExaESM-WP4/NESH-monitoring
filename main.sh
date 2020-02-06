@@ -27,7 +27,7 @@ fi
 mkdir -p host_logs/
 mkdir -p request_logs/
 
-target_sec=$(date -d "+7 days" +%s) # Total output period
+target_sec=$(date -d "+91 days" +%s) # Total output period
 salt_value=$(uuidgen -r) # Random UUID as salt value
 
 while [ $[$target_sec-$(date +%s)] -gt 0 ]; do
