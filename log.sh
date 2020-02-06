@@ -32,7 +32,17 @@ salt_value=$(uuidgen -r) # Random UUID as salt value
 
 while [ $[$target_sec-$(date +%s)] -gt 0 ]; do
  now=$(date +"%Y-%m-%d-%H-%M-%S")
- qstat -E -F fcpu,fmem1,fswap1,ucpu,umem1,uswap1,cpuavg1,ldavg1,ehost,quenm | gzip - > host_logs/${now}.log.gz
- ./qstatall.py ${salt_value} request_logs/${now}.csv.gz
+ qstat -E -F fcpu,fmem1,fswap1,ucpu,umem1,uswap1,cpuavg1,ldavg1,ehost,quenm > host_logs/${now}.log
+ ./qstatall.py ${salt_value} request_logs/${now}.csv
  sleep 10m # Output interval
 done
+
+# Log file grouped compression.
+
+cd host_logs
+first=`ls *.log | head -1`
+tar czf cycle_${first:0:19}.tar.gz *.log && rm *.log
+
+cd ../request_logs
+first=`ls *.csv | head -1`
+tar czf cycle_${first:0:19}.tar.gz *.csv && rm *.csv
