@@ -81,7 +81,7 @@ def read_request_logs(folder,files):
     
     # Tidy up data frame.
     
-    logs = logs.drop(columns=["Pri", "S", "R", "H", "M", "Jobs"])
+    logs = logs.drop(columns=["Pri", "S", "R", "H", "M"])
     
     # String conversion.
     
