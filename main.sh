@@ -1,5 +1,19 @@
 #!/bin/bash
 
+# Define e-mail alert behaviour.
+
+trap 'echo Finished...; shutdown' EXIT
+trap 'echo Killed...; forced_shutdown' SIGKILL SIGTERM SIGINT SIGHUP
+
+forced_shutdown() {
+ $(echo "$(date)" | mail -s "Nesh log cycle aborted" user@host); wait $!
+ PGID=$$; setsid kill -9 -$PGID
+}
+
+shutdown() {
+ $(echo "$(date)" | mail -s "Nesh log cycle finished" user@host); wait $!
+}
+
 # Steps to create a clean env
 #
 # module load python3.7.4
@@ -46,3 +60,4 @@ tar czf cycle_${first:0:19}.tar.gz *.log && rm *.log
 cd ../request_logs
 first=`ls *.csv | head -1`
 tar czf cycle_${first:0:19}.tar.gz *.csv && rm *.csv
+
