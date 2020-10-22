@@ -1,5 +1,4 @@
 .ipynb_checkpoints
 request_logs/*.csv
 host_logs/*.log
-__pycache__
-*.prq
+*.parquet

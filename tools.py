@@ -68,6 +68,7 @@ def read_request_logs(folder,files):
         with tarfile.open(tar_file_name,'r') as tar:
             tar_log_files = tar.getnames()
             log_subset = pd.concat([ pd.read_csv(tar.extractfile(log)) for log in tar_log_files ])
+            log_subset["Filename"] = tar_file_name
         return log_subset
     
     # Obtain archive file names.
@@ -75,24 +76,17 @@ def read_request_logs(folder,files):
     tar_files = glob.glob(folder+files)
     tar_files.sort() # Not mandatory.
     
-    # Read logs.
+    # Process logs.
     
-    logs = pd.concat([ process_tar_archive(tar_file) for tar_file in tar_files ])
-    
-    # Tidy up data frame.
-    
-    logs = logs.drop(columns=["Pri", "S", "R", "H", "M"])
+    logs = pd.concat([ process_tar_archive(tar_file) for tar_file in tar_files ], ignore_index=True)
     
     # String conversion.
     
-    logs["Time"] = pd.to_datetime(logs["Time"]) # time stamps
+    logs["Time"] = pd.to_datetime(logs["Time"]).dt.tz_localize(tz='Europe/Berlin').dt.round('1s') # time stamps
     logs["Elapse"] = pd.to_numeric(logs["Elapse"], errors='coerce') # elapse in seconds
     logs["CPU"] = pd.to_numeric(logs["CPU"], errors='coerce') # accumulated CPU hours
-    logs["Memory"] = logs["Memory"].apply(parse_size) # present memory usage in GB
-    
-    # Unit conversions and derived types.
-    logs["CPU_occ"] = logs["CPU"]/logs["Elapse"] # occupied CPU number
-    logs["Elapse"] = logs["Elapse"]/60 # elapse in minutes
+    logs["Memory"] = logs["Memory"].apply(parse_size) # memory usage in GB
+    logs["Jobs"] = pd.to_numeric(logs["Jobs"], errors='coerce')
     
     return logs
 
